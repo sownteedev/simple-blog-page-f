@@ -12,6 +12,8 @@ import Footer from './components/TopnBot/Footer';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import AdminDashboard from './components/Admin/AdminDashboard';
+import Create from './components/Post/Create';
+import Edit from './components/Post/Edit';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/new-post" element={<Create />} />
+          <Route path="/admin/edit/:id" element={<Edit />} />
           <Route path="/" element={
             <>
               <Hero />
