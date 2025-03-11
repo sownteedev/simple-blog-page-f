@@ -73,7 +73,7 @@ const Blog = () => {
         {isStandalonePage && (
           <div className="blog-header">
             <h1>Our Blog</h1>
-            <p>Discover stories, insights, and updates from our educational journey</p>
+            <p>Discover stories, insights, and updates from our Blog</p>
             
             <div className="blog-filters">
               <div className="search-box">

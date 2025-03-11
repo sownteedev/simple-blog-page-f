@@ -1,5 +1,6 @@
 import React from 'react';
 import './Hero.css';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -7,7 +8,10 @@ const Hero = () => {
       <div className="hero-overlay"></div>
       <div className="hero-content">
         <h1>Welcome to Our Blog Web</h1>
-        <a href="#learn-more" className="hero-btn">Learn More</a>
+        <a href="blog" className="hero-btn">
+          <Link to="/blog" >
+            Visit Blog
+        </Link></a>
       </div>
     </section>
   );

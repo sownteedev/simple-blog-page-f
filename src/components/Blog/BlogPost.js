@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 import './BlogPost.css';
 
 const BlogPost = () => {
@@ -59,7 +58,6 @@ const BlogPost = () => {
           image: "https://source.unsplash.com/1200x600/?education,rural",
           readTime: "5 min read",
           authorImage: "https://source.unsplash.com/100x100/?portrait",
-          authorBio: "Sarah is an education specialist with over 10 years of experience in developing rural education programs.",
           relatedPosts: [
             {
               id: 2,
@@ -96,7 +94,7 @@ const BlogPost = () => {
       top: 0,
       behavior: 'instant'
     });
-  }, [id]); // This will trigger when blog post id changes
+  }, [id]);
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
