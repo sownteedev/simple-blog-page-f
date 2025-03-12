@@ -38,12 +38,12 @@
     line-height: 1.8;
   }
   
-  .social-links {
+  .social-linkss {
     display: flex;
     gap: 15px;
   }
   
-  .social-links a {
+  .social-linkss a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,7 +54,7 @@
     transition: background-color 0.3s ease;
   }
   
-  .social-links a:hover {
+  .social-linkss a:hover {
     background-color: #e5c7b7;
   }
   

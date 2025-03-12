@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="footer-section">
             <h3>SonHao Blog</h3>
             <p>Contact with us</p>
-            <div className="social-links">
+            <div className="social-linkss">
               <a href="#facebook" aria-label="Facebook"><FaFacebook /></a>
               <a href="#twitter" aria-label="Twitter"><FaTwitter /></a>
               <a href="#instagram" aria-label="Instagram"><FaInstagram /></a>

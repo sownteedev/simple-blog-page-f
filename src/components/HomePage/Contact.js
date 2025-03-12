@@ -12,15 +12,15 @@ const Contact = () => {
             <div className="contact-details">
               <div className="contact-item">
                 <h3>Email</h3>
-                <p>info@lusakaeducation.org</p>
+                <p>info@sonhao.com</p>
               </div>
               <div className="contact-item">
                 <h3>Phone</h3>
-                <p>+260 970 123456</p>
+                <p>+84 123456789</p>
               </div>
               <div className="contact-item">
                 <h3>Address</h3>
-                <p>123 Education Street, Lusaka, Zambia</p>
+                <p>96A Đ. Trần Phú, P. Mộ Lao, Hà Đông, Hà Nội</p>
               </div>
             </div>
           </div>
@@ -32,9 +32,6 @@ const Contact = () => {
               </div>
               <div className="form-group">
                 <input type="email" placeholder="Email" required />
-              </div>
-              <div className="form-group">
-                <input type="text" placeholder="Subject" />
               </div>
               <div className="form-group">
                 <textarea placeholder="Message" rows="5" required></textarea>
