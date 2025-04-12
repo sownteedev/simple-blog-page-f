@@ -1,0 +1,6 @@
+TECHSTACK:
+- REACT
+- FASTAPI
+- MYSQL
+
+:))))))
