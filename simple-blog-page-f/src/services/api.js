@@ -16,6 +16,9 @@ api.interceptors.request.use(
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('Adding token to request:', token);
+    } else {
+      console.log('No token found in localStorage');
     }
     return config;
   },
@@ -38,10 +41,17 @@ api.interceptors.response.use(
 
 // Auth services
 export const authService = {
-  login: async (email, password) => {
+  login: async (usernameOrEmail, password) => {
     try {
-      console.log('Login attempt with:', email);
-      const response = await api.post('/auth/login', { email, password });
+      console.log('Login attempt with:', usernameOrEmail);
+      
+      // Determine if input is email or username
+      const isEmail = usernameOrEmail.includes('@');
+      const loginData = isEmail 
+        ? { email: usernameOrEmail, password } 
+        : { username: usernameOrEmail, password };
+      
+      const response = await api.post('/auth/login', loginData);
       
       if (response.data.success) {
         console.log('Login successful:', response.data);
@@ -259,6 +269,44 @@ export const userService = {
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Failed to delete user' };
+    }
+  }
+};
+
+// Message services
+export const messageService = {
+  sendMessage: async (messageData) => {
+    try {
+      console.log("Sending to API:", messageData);
+      const response = await api.post('/messages', messageData);
+      console.log("API response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Message send error details:", error);
+      if (error.response) {
+        return error.response.data || { success: false, message: 'Failed to send message' };
+      } else {
+        return { success: false, message: 'Failed to send message' };
+      }
+    }
+  },
+
+  getMessages: async () => {
+    try {
+      const response = await api.get('/messages');
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      throw error;
+    }
+  },
+
+  deleteMessage: async (id) => {
+    try {
+      const response = await api.delete(`/messages/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: 'Failed to delete message' };
     }
   }
 };

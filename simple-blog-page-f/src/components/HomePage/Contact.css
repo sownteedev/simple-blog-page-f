@@ -11,14 +11,37 @@
   .contact-content {
     display: flex;
     gap: 60px;
+    align-items: center;
   }
   
   .contact-info {
-    flex: 0 0 40%;
+    flex: 0 0 70%;
   }
   
-  .contact-form {
-    flex: 0 0 60%;
+  .contact-mail-icon {
+    flex: 0 0 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .contact-mail-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  .contact-mail-icon i {
+    font-size: 5rem;
+    color: #b39378;
+    margin-bottom: 15px;
+  }
+  
+  .contact-mail-icon span {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
   }
   
   .contact-info h2 {
@@ -85,12 +108,98 @@
     background-color: #a58469;
   }
   
+  /* Message Popup */
+  .message-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .message-popup {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: slideUp 0.4s ease;
+  }
+  
+  .message-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #b39378;
+    color: white;
+  }
+  
+  .message-popup-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .close-popup-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+  }
+  
+  .message-popup form {
+    padding: 20px;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+  }
+  
+  .success-message {
+    text-align: center;
+    padding: 30px 20px;
+  }
+  
+  .success-message i {
+    font-size: 4rem;
+    color: #28a745;
+    margin-bottom: 15px;
+  }
+  
+  .success-message p {
+    color: #333;
+    font-size: 1.1rem;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
   @media (max-width: 992px) {
     .contact-content {
       flex-direction: column;
     }
     
-    .contact-info, .contact-form {
+    .contact-info, .contact-mail-icon {
       flex: 0 0 100%;
     }
   }

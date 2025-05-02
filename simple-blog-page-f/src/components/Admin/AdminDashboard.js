@@ -58,7 +58,11 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <div className="admin-header">
         <h1>Blog Management</h1>
-        <Link to="/admin/new-post" className="new-post-btn">Create New Post</Link>
+        <div className="admin-nav">
+          <Link to="/admin/new-post" className="new-post-btn">Create New Post</Link>
+          <Link to="/admin/messages" className="admin-btn">Messages</Link>
+          <Link to="/admin/settings" className="admin-btn">Settings</Link>
+        </div>
       </div>
 
       <div className="blog-list">
