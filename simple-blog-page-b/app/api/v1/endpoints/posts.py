@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, asc
 from typing import List, Optional
-
+from sqlalchemy import text
 from app.core.database import get_db
+from app.models.blog import Vulnerability
 from app.core.security import get_current_user, get_current_admin_user
 from app.models.blog import Post, User, Category, Comment
 from app.schemas.blog import (
@@ -14,7 +15,6 @@ from app.schemas.blog import (
 
 router = APIRouter()
 
-# Public post endpoints
 @router.get("/", response_model=List[PostList])
 def get_posts(
     skip: int = 0, 
@@ -25,29 +25,52 @@ def get_posts(
     db: Session = Depends(get_db)
 ):
     """
-    Get all published blog posts with filtering options
+    Get all published blog posts with filtering options,
+    nếu vuln id=3 status=YES thì dùng raw SQL (có SQLi),
+    ngược lại dùng filter an toàn.
     """
-    query = db.query(Post).filter(Post.status == "published").order_by(asc(Post.created_at))
-    
-    # Apply filters
+    query = db.query(Post)\
+              .filter(Post.status == "published")\
+              .order_by(asc(Post.created_at))
+
+    # Apply filters cứng
     if category:
-        category_obj = db.query(Category).filter(Category.slug == category).first()
-        if category_obj:
-            query = query.filter(Post.category_id == category_obj.id)
-    
+        cat = db.query(Category).filter(Category.slug == category).first()
+        if cat:
+            query = query.filter(Post.category_id == cat.id)
+
     if featured is not None:
         query = query.filter(Post.is_featured == featured)
-        
+
+    # Branch cho phần search
     if search:
+        # 1. Lấy status của vuln id=3
+        vuln3 = db.query(Vulnerability).filter(Vulnerability.id == 3).first()
+        use_sql_injection = vuln3 and vuln3.status.upper() == "YES"
+
+        # if use_sql_injection:
+        #     print("Using raw SQL for search")
+        #     raw_sql = (
+        #       f"(posts.title LIKE '{search}') OR "
+        #       f"(posts.content LIKE '{search}') OR "
+        #       f"(posts.excerpt LIKE '{search}')"
+        #     )
+        #     query = query.filter(text(raw_sql))
+        # else:
+        #     print("Using safe filter for search")
+        #     query = query.filter(
+        #       (Post.title.ilike(f"%{search}%")) |
+        #       (Post.content.ilike(f"%{search}%")) |
+        #       (Post.excerpt.ilike(f"%{search}%"))
+        #     )
         query = query.filter(
-            (Post.title.ilike(f"%{search}%")) | 
-            (Post.content.ilike(f"%{search}%")) |
-            (Post.excerpt.ilike(f"%{search}%"))
-        )
-    
+              (Post.title.ilike(f"%{search}%")) |
+              (Post.content.ilike(f"%{search}%")) |
+              (Post.excerpt.ilike(f"%{search}%"))
+            )
+
     total = query.count()
     posts = query.offset(skip).limit(limit).all()
-    print(query)
     return posts
 
 @router.get("/{post_id}", response_model=PostSchema)

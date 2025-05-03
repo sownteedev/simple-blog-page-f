@@ -57,11 +57,8 @@ def init_db(db: Session) -> None:
         print("Sample data initialized successfully")
         
     vulnerability_names = [
-        "XSS", "CSRF", "SSRF",
-        "SQLi", "SSTI", "XXE",
-        "Broken Authentication", "Path Traversal", "JWT",
-        "File upload", "OS Command Injection", "HTTP Smuggling",
-        "Deserialization", "IDOR"
+        "XSS", "JWT", "SQLi",
+        "Broken Authentication"
     ]
 
     for name in vulnerability_names:
