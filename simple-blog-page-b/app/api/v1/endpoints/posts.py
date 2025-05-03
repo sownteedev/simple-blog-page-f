@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 from typing import List, Optional
 
 from app.core.database import get_db
@@ -27,7 +27,7 @@ def get_posts(
     """
     Get all published blog posts with filtering options
     """
-    query = db.query(Post).filter(Post.status == "published").order_by(desc(Post.created_at))
+    query = db.query(Post).filter(Post.status == "published").order_by(asc(Post.created_at))
     
     # Apply filters
     if category:
@@ -47,7 +47,7 @@ def get_posts(
     
     total = query.count()
     posts = query.offset(skip).limit(limit).all()
-    
+    print(query)
     return posts
 
 @router.get("/{post_id}", response_model=PostSchema)

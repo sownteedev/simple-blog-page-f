@@ -56,3 +56,10 @@ class Comment(Base):
     
     post = relationship("Post", back_populates="comments")
     author = relationship("User", back_populates="comments") 
+    
+class Vulnerability(Base):
+    __tablename__ = "vulnerabilities"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), index=True)
+    status = Column(String(20), default="No")

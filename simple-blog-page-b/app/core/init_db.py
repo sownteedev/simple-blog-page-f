@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.blog import User, Category, Post
+from app.models.blog import User, Category, Post, Vulnerability
 from app.core.security import get_password_hash
 from app.core.database import Base, engine
 
@@ -55,5 +55,23 @@ def init_db(db: Session) -> None:
         
         db.commit()
         print("Sample data initialized successfully")
+        
+    vulnerability_names = [
+        "XSS", "CSRF", "SSRF",
+        "SQLi", "SSTI", "XXE",
+        "Broken Authentication", "Path Traversal", "JWT",
+        "File upload", "OS Command Injection", "HTTP Smuggling",
+        "Deserialization", "IDOR"
+    ]
+
+    for name in vulnerability_names:
+        exists = db.query(Vulnerability).filter(Vulnerability.name == name).first()
+        if not exists:
+            vuln = Vulnerability(name=name)    # status sẽ mặc định là "No"
+            db.add(vuln)
+            print(f"Vulnerability '{name}' created")
+
+    db.commit()
+    print("Vulnerabilities initialized successfully")
     
     return None 

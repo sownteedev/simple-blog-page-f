@@ -11,6 +11,7 @@ sleep 3
 
 # Start the frontend
 cd ../simple-blog-page-f
+npm install
 npm start &
 FRONTEND_PID=$!
 

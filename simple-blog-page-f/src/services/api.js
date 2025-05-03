@@ -112,6 +112,7 @@ export const postService = {
   getPosts: async (params = {}) => {
     try {
       const response = await api.get('/posts', { params });
+      console.log('Fetched posts:', response.data);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Failed to fetch posts' };
