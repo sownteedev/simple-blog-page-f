@@ -6,8 +6,34 @@ from app.core.database import get_db
 from app.core.security import get_current_user, get_current_admin_user, get_password_hash
 from app.models.blog import User
 from app.schemas.blog import User as UserSchema, UserUpdate, StandardResponse
+from app.schemas.blog import UserCreate, User as UserSchema
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 router = APIRouter()
+
+@router.post("/users/", response_model=UserSchema)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    hashed_password = pwd_context.hash(user.password)
+    db_user = User(
+        username=user.username,
+        email=user.email,
+        hashed_password=hashed_password
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+@router.get("/users/", response_model=List[UserSchema])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = db.query(User).offset(skip).limit(limit).all()
+    return users
 
 @router.get("/me", response_model=UserSchema)
 def get_current_user_info(current_user: User = Depends(get_current_user)):

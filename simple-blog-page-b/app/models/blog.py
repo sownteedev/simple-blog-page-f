@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Boolean, func
+from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 from app.core.database import Base
 
@@ -63,3 +63,12 @@ class Vulnerability(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), index=True)
     status = Column(String(20), default="No")
+
+class Message(Base):
+    __tablename__ = "messages"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text, nullable=False)
+    username = Column(String(100), nullable=False)  # Tên người gửi
+    created_at = Column(DateTime, default=func.now())
+

@@ -11,9 +11,11 @@ import Contact from './components/HomePage/Contact';
 import Footer from './components/TopnBot/Footer';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
-import AdminDashboard from './components/Admin/AdminDashboard';
+import AdminPanel from './components/Admin/AdminPanel';
+import AdminMessages from './components/Admin/AdminMessages';
 import Create from './components/Post/Create';
 import Edit from './components/Post/Edit';
+import Settings from './components/Settings/Settings';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Protected route for admin
@@ -60,7 +62,15 @@ const AppRoutes = () => {
             path="/admin" 
             element={
               <AdminRoute>
-                <AdminDashboard />
+                <AdminPanel />
+              </AdminRoute>
+            }
+          />
+          <Route 
+            path="/admin/messages" 
+            element={
+              <AdminRoute>
+                <AdminMessages />
               </AdminRoute>
             }
           />
@@ -77,6 +87,14 @@ const AppRoutes = () => {
             element={
               <AdminRoute>
                 <Edit />
+              </AdminRoute>
+            }
+          />
+          <Route 
+            path="/admin/settings" 
+            element={
+              <AdminRoute>
+                <Settings />
               </AdminRoute>
             }
           />

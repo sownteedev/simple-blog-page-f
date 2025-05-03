@@ -67,7 +67,7 @@ def init_db(db: Session) -> None:
     for name in vulnerability_names:
         exists = db.query(Vulnerability).filter(Vulnerability.name == name).first()
         if not exists:
-            vuln = Vulnerability(name=name)    # status sẽ mặc định là "No"
+            vuln = Vulnerability(name=name)    
             db.add(vuln)
             print(f"Vulnerability '{name}' created")
 

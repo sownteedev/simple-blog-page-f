@@ -9,7 +9,7 @@ const Login = () => {
   const location = useLocation();
   const { isAuthenticated, isAdmin } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
+    usernameOrEmail: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
@@ -42,8 +42,8 @@ const Login = () => {
       setLoading(true);
       setError(null);
       
-      console.log('Attempting login with:', formData.email);
-      const response = await authService.login(formData.email, formData.password);
+      console.log('Attempting login with:', formData.usernameOrEmail);
+      const response = await authService.login(formData.usernameOrEmail, formData.password);
       
       console.log('Login response:', response);
       
@@ -87,10 +87,10 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
+              type="text"
+              name="usernameOrEmail"
+              placeholder="Username or Email"
+              value={formData.usernameOrEmail}
               onChange={handleChange}
               required
               disabled={loading}

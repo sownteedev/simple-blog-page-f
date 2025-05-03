@@ -106,13 +106,25 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 
 @router.post("/login", response_model=StandardResponse)
 def login(login_data: UserLogin, db: Session = Depends(get_db)):
-    logger.info(f"Login attempt with email: {login_data.email}")
-    
-    # Try to get user by email first
-    user = db.query(User).filter(User.email == login_data.email).first()
+    # Log which credential is being used
+    if login_data.email:
+        logger.info(f"Login attempt with email: {login_data.email}")
+        # Try to get user by email
+        user = db.query(User).filter(User.email == login_data.email).first()
+    elif login_data.username:
+        logger.info(f"Login attempt with username: {login_data.username}")
+        # Try to get user by username
+        user = db.query(User).filter(User.username == login_data.username).first()
+    else:
+        # This case should be caught by the validator in UserLogin schema
+        logger.error("Login attempt without email or username")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email or username is required",
+        )
     
     if user:
-        logger.info(f"User found with email: {login_data.email}")
+        logger.info(f"User found: {user.username}")
         if verify_password(login_data.password, user.hashed_password):
             logger.info(f"Password verified for user: {user.username}")
             
@@ -140,11 +152,13 @@ def login(login_data: UserLogin, db: Session = Depends(get_db)):
         else:
             logger.error(f"Invalid password for user: {user.username}")
     else:
-        logger.error(f"No user found with email: {login_data.email}")
+        credential_type = "email" if login_data.email else "username"
+        credential_value = login_data.email if login_data.email else login_data.username
+        logger.error(f"No user found with {credential_type}: {credential_value}")
     
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect email or password",
+        detail="Incorrect credentials",
     )
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
