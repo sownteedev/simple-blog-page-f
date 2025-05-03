@@ -17,11 +17,6 @@ const Settings = () => {
 
   // 1. GET /settings
   useEffect(() => {
-    if (!isAdmin) {
-      navigate('/login');
-      return;
-    }
-
     const loadVulns = async () => {
       try {
         const response = await api.get('/settings');
@@ -42,7 +37,7 @@ const Settings = () => {
     };
 
     loadVulns();
-  }, [isAdmin, navigate]);
+  }, []);
 
   const handleToggle = id =>
     setVulnerabilities(prev =>
@@ -76,8 +71,8 @@ const Settings = () => {
     <div className="settings-container">
       <div className="admin-header">
         <h1 className="settings-title">Settings Vulnerability</h1>
-        <button onClick={() => navigate('/admin')} className="admin-btn">
-          Back to Dashboard
+        <button onClick={() => navigate(isAdmin ? '/admin' : '/')} className="admin-btn">
+          {isAdmin ? 'Back to Dashboard' : 'Back to Home'}
         </button>
       </div>
 

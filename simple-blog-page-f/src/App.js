@@ -91,11 +91,11 @@ const AppRoutes = () => {
             }
           />
           <Route 
-            path="/admin/settings" 
+            path="/settings" 
             element={
-              <AdminRoute>
+              <PrivateRoute>
                 <Settings />
-              </AdminRoute>
+              </PrivateRoute>
             }
           />
           <Route path="/" element={

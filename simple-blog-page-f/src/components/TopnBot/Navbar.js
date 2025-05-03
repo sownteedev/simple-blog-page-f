@@ -11,11 +11,21 @@ const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
+    // Apply scrolled state immediately if not on home page
+    if (location.pathname !== '/') {
+      setScrolled(true);
+    } else {
+      setScrolled(window.scrollY > 50);
+    }
+    
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      // Only apply scroll-based styling on home page
+      if (location.pathname === '/') {
+        if (window.scrollY > 50) {
+          setScrolled(true);
+        } else {
+          setScrolled(false);
+        }
       }
     };
 
@@ -23,7 +33,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   const handleNavClick = (sectionId) => {
     setMenuOpen(false);
@@ -87,6 +97,17 @@ const Navbar = () => {
                 Blog
               </Link>
             </li>
+            {isAuthenticated && (
+              <li>
+                <Link 
+                  to="/settings" 
+                  className="nav-link"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Settings
+                </Link>
+              </li>
+            )}
             {isAuthenticated && user?.is_admin && (
               <li>
                 <Link 
