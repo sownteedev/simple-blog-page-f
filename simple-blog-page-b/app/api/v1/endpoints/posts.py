@@ -2,9 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, asc
 from typing import List, Optional
-from sqlalchemy import text
 from app.core.database import get_db
-from app.models.blog import Vulnerability
 from app.core.security import get_current_user, get_current_admin_user
 from app.models.blog import Post, User, Category, Comment
 from app.schemas.blog import (
@@ -44,25 +42,6 @@ def get_posts(
 
     # Branch cho phần search
     if search:
-        # 1. Lấy status của vuln id=3
-        vuln3 = db.query(Vulnerability).filter(Vulnerability.id == 3).first()
-        use_sql_injection = vuln3 and vuln3.status.upper() == "YES"
-
-        # if use_sql_injection:
-        #     print("Using raw SQL for search")
-        #     raw_sql = (
-        #       f"(posts.title LIKE '{search}') OR "
-        #       f"(posts.content LIKE '{search}') OR "
-        #       f"(posts.excerpt LIKE '{search}')"
-        #     )
-        #     query = query.filter(text(raw_sql))
-        # else:
-        #     print("Using safe filter for search")
-        #     query = query.filter(
-        #       (Post.title.ilike(f"%{search}%")) |
-        #       (Post.content.ilike(f"%{search}%")) |
-        #       (Post.excerpt.ilike(f"%{search}%"))
-        #     )
         query = query.filter(
               (Post.title.ilike(f"%{search}%")) |
               (Post.content.ilike(f"%{search}%")) |

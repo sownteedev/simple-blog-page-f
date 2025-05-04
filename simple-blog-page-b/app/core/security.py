@@ -68,7 +68,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        cur_secret_key = settings.SECRET_KEY
+        payload = jwt.decode(token, cur_secret_key, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             logger.error("Token payload missing 'sub' field")

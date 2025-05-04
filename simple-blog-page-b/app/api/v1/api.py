@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, users, posts, categories, blog, messages, settings
+from app.api.v1.endpoints import auth, users, posts, categories, blog, messages, settings, subscribers
 
 api_router = APIRouter()
 
@@ -10,3 +10,4 @@ api_router.include_router(categories.router, prefix="/categories", tags=["Catego
 api_router.include_router(blog.router, prefix="/blog", tags=["Blog"])
 api_router.include_router(messages.router, prefix="/messages", tags=["Messages"])
 api_router.include_router(settings.router, prefix="/settings", tags=["Vulnerabilities"])
+api_router.include_router(subscribers.router, prefix="/subscribers", tags=["Subscribers"])

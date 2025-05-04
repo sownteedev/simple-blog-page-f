@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Footer.css';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/subscribers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (response.ok) {
+        setStatus('Subscribed successfully!');
+        setEmail('');
+      } else {
+        setStatus('Subscription failed. Please try again.');
+      }
+    } catch (error) {
+      setStatus('Error occurred. Please try again later.');
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -32,10 +57,17 @@ const Footer = () => {
           <div className="footer-section">
             <h3>Newsletter</h3>
             <p>Subscribe to our newsletter for updates on our work.</p>
-            <form className="newsletter-form">
-              <input type="email" placeholder="Your Email" required />
+            <form className="newsletter-form" onSubmit={handleSubmit}>
+              <input
+                type="email"
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
               <button type="submit">Subscribe</button>
             </form>
+            {status && <p className="subscription-status">{status}</p>}
           </div>
         </div>
         

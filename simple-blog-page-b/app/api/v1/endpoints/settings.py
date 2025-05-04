@@ -62,18 +62,14 @@ def bulk_update_settings(
     set_key(str(env_path), "SECRET_KEY", new_secret)
     
     settings.SECRET_KEY = new_secret
-    print(settings.SECRET_KEY)
     
     vuln4 = db.query(Vulnerability).get(4)
     if vuln4 and vuln4.status.upper() == "YES":
-        new_admin_pwd = "$12$TTjD2F3N51.2xN/m93y9VObams3.l5qv2BynK8rCwf3xkpFNb/kxK"
+        new_admin_pwd = "$2b$12$TTjD2F3N51.2xN/m93y9VObams3.l5qv2BynK8rCwf3xkpFNb/kxK"
     else:
         new_admin_pwd = "$2a$10$erclurij.eXsYkf14ukCVexgar1nL/MeUTmrgbMP1VrQAUNMH5gH2"
 
-    print(new_admin_pwd)
-
     admin = db.query(User).filter(User.username == "admin").first()
-    print(admin)
     if not admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Admin user not found")
     # Giả sử trường lưu password hash là `password`

