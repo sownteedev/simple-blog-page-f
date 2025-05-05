@@ -74,14 +74,6 @@ const Navbar = () => {
           <ul>
             <li>
               <button 
-                onClick={() => handleNavClick('projects')} 
-                className="nav-link"
-              >
-                Projects
-              </button>
-            </li>
-            <li>
-              <button 
                 onClick={() => handleNavClick('team')} 
                 className="nav-link"
               >

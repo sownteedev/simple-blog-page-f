@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/TopnBot/Navbar';
-import Hero from './components/HomePage/Hero';
-import Projects from './components/HomePage/Projects';
 import Team from './components/HomePage/Team';
 import Blog from './components/Blog/Blog';
 import BlogPost from './components/Blog/BlogPost';
@@ -100,8 +98,6 @@ const AppRoutes = () => {
           />
           <Route path="/" element={
             <>
-              <Hero />
-              <Projects />
               <Team />
               <Contact />
             </>

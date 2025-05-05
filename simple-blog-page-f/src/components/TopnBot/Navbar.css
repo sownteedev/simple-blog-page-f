@@ -28,7 +28,7 @@
   .navbar-logo a {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #fff;
+    color: #333;
     transition: color 0.3s ease;
   }
   
@@ -52,7 +52,7 @@
   }
   
   .navbar-menu a {
-    color: #fff;
+    color: #333;
     font-size: 1rem;
     font-weight: 500;
     transition: color 0.3s ease;
@@ -96,13 +96,9 @@
   .navbar-toggle span {
     width: 25px;
     height: 3px;
-    background-color: #fff;
+    background-color: #333;
     margin: 3px 0;
     transition: all 0.3s ease;
-  }
-  
-  .navbar.scrolled .navbar-toggle span {
-    background-color: #333;
   }
   
   @media (max-width: 992px) {
@@ -183,14 +179,10 @@
   }
   
   .username {
-    color: #fff;
+    color: #333;
     font-weight: 600;
     font-size: 1rem;
     transition: color 0.3s ease;
-  }
-  
-  .navbar.scrolled .username {
-    color: #333;
   }
   
   .auth-btn.logout {
@@ -227,17 +219,13 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    color: #fff;
+    color: #333;
     font-size: 1.1rem;
     font-weight: 500;
     transition: color 0.3s ease;
     position: relative;
     font-family: inherit;
     text-decoration: none;
-  }
-  
-  .scrolled .nav-link {
-    color: #333;
   }
   
   .nav-link:after {
