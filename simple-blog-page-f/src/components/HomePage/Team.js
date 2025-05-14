@@ -22,7 +22,7 @@ const Team = () => {
       id: 2,
       name: "Nguyen Thanh Son",
       role: "Member",
-      image: "https://scontent.fhan20-1.fna.fbcdn.net/v/t39.30808-1/467896530_122189603000206736_6809568542440186347_n.jpg?stp=dst-jpg_s160x160_tt6&_nc_cat=103&ccb=1-7&_nc_sid=111fe6&_nc_ohc=Hvmae8mNxs8Q7kNvwF9oRHZ&_nc_oc=Adm-lQzfI-vGyMx2-_lKzTpi_N3Gncb5V3qEqTE_z5gGec6c7TGmz60s_W7JcP5wd2pspTVqEPswbWu9UlyxmEy9&_nc_zt=24&_nc_ht=scontent.fhan20-1.fna&_nc_gid=o5Mp0cZzZ3hvtsI76zx1Tw&oh=00_AfG0yElcyA22LMD8bBuOXGLUQpiPp4zzoYXW6gCqNDJhDw&oe=681EA8C2",
+      image: "https://topdanangcity.com/wp-content/uploads/2024/09/anh-meo-meme-4-1.png",
       bio: "I love coding.",
       social: {
         facebook: "https://facebook.com",

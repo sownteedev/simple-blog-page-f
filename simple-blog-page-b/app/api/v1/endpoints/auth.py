@@ -14,13 +14,13 @@ from app.core.security import authenticate_user, create_access_token, get_passwo
 from app.models.blog import User
 from app.schemas.blog import UserCreate, User as UserSchema, Token, StandardResponse, UserLogin
 
-# Set up logging
+# Thiết lập logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Password hashing
+# Mã hóa mật khẩu
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -46,7 +46,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 @router.post("/register", response_model=StandardResponse)
 def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
-    # Check if user exists
+    # Kiểm tra xem người dùng đã tồn tại chưa
     db_user = db.query(User).filter(User.email == user_data.email).first()
     if db_user:
         raise HTTPException(
@@ -54,7 +54,7 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
             detail="Email already registered"
         )
     
-    # Create new user
+    # Tạo người dùng mới
     hashed_password = get_password_hash(user_data.password)
     db_user = User(
         username=user_data.username,
@@ -73,15 +73,14 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/token", response_model=Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    # The OAuth2PasswordRequestForm expects username field, but we're using email
-    # So we need to authenticate using the username field as email
+    # Xác thực bằng cách sử dụng trường username như email
     logger.info(f"Token login attempt with username: {form_data.username}")
     
-    # First try to authenticate with email as username
+    # Đầu tiên thử xác thực với email
     user = authenticate_user(db, form_data.username, form_data.password)
     
     if not user:
-        # If authentication with email fails, try to find by username
+        # Nếu xác thực với email thất bại, thử tìm bằng username
         db_user = db.query(User).filter(User.username == form_data.username).first()
         if db_user:
             if verify_password(form_data.password, db_user.hashed_password):
@@ -106,17 +105,17 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 
 @router.post("/login", response_model=StandardResponse)
 def login(login_data: UserLogin, db: Session = Depends(get_db)):
-    # Log which credential is being used
+    # Ghi log thông tin đăng nhập đang được sử dụng
     if login_data.email:
         logger.info(f"Login attempt with email: {login_data.email}")
-        # Try to get user by email
+        # Thử lấy người dùng bằng email
         user = db.query(User).filter(User.email == login_data.email).first()
     elif login_data.username:
         logger.info(f"Login attempt with username: {login_data.username}")
-        # Try to get user by username
+        # Thử lấy người dùng bằng username
         user = db.query(User).filter(User.username == login_data.username).first()
     else:
-        # This case should be caught by the validator in UserLogin schema
+        # Trường hợp này sẽ được bắt bởi validator trong schema UserLogin
         logger.error("Login attempt without email or username")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -175,5 +174,4 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    # In a real app, you would fetch the user from the database here
-    return token_data 
+    return token_data

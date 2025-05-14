@@ -12,7 +12,7 @@ router = APIRouter()
 @router.get("/", response_model=List[CategorySchema])
 def get_categories(db: Session = Depends(get_db)):
     """
-    Get all categories
+    Lấy tất cả danh mục
     """
     categories = db.query(Category).all()
     return categories
@@ -24,9 +24,9 @@ def create_category(
     db: Session = Depends(get_db)
 ):
     """
-    Create a new category (admin only)
+    Tạo danh mục mới (chỉ dành cho admin)
     """
-    # Check if category exists
+    # Kiểm tra xem danh mục đã tồn tại chưa
     db_category = db.query(Category).filter(
         (Category.name == category.name) | (Category.slug == category.slug)
     ).first()
@@ -37,7 +37,7 @@ def create_category(
             detail="Category with this name or slug already exists"
         )
     
-    # Create new category
+    # Tạo danh mục mới
     db_category = Category(
         name=category.name,
         slug=category.slug
@@ -56,13 +56,13 @@ def update_category(
     db: Session = Depends(get_db)
 ):
     """
-    Update a category (admin only)
+    Cập nhật danh mục (chỉ dành cho admin)
     """
     db_category = db.query(Category).filter(Category.id == category_id).first()
     if not db_category:
         raise HTTPException(status_code=404, detail="Category not found")
     
-    # Check for conflicts
+    # Kiểm tra trùng lặp
     conflict = db.query(Category).filter(
         (Category.id != category_id) &
         ((Category.name == category.name) | (Category.slug == category.slug))
@@ -88,13 +88,13 @@ def delete_category(
     db: Session = Depends(get_db)
 ):
     """
-    Delete a category (admin only)
+    Xóa danh mục (chỉ dành cho admin)
     """
     db_category = db.query(Category).filter(Category.id == category_id).first()
     if not db_category:
         raise HTTPException(status_code=404, detail="Category not found")
     
-    # Check if any posts are using this category
+    # Kiểm tra xem có bài viết nào đang sử dụng danh mục này không
     posts_count = db.query(db_category.posts).count()
     if posts_count > 0:
         raise HTTPException(

@@ -15,25 +15,25 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-# CORS middleware configuration
+# Cấu hình middleware CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Frontend development server
+    allow_origins=["http://localhost:3000"],  # Máy chủ phát triển frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Create tables if they don't exist
+# Tạo bảng nếu chúng chưa tồn tại
 Base.metadata.create_all(bind=engine)
 
-# Initialize database with sample data
+# Khởi tạo cơ sở dữ liệu với dữ liệu mẫu
 @app.on_event("startup")
 async def startup_db_client():
     db = next(get_db())
     init_db(db)
 
-# Include API router
+# Bao gồm router API
 app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/")

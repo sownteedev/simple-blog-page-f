@@ -23,7 +23,7 @@ def get_posts(
     db: Session = Depends(get_db)
 ):
     """
-    Get all published blog posts with filtering options,
+    Lấy tất cả bài viết blog đã xuất bản với các tùy chọn lọc,
     nếu vuln id=3 status=YES thì dùng raw SQL (có SQLi),
     ngược lại dùng filter an toàn.
     """
@@ -31,7 +31,7 @@ def get_posts(
               .filter(Post.status == "published")\
               .order_by(asc(Post.created_at))
 
-    # Apply filters cứng
+    # Áp dụng các bộ lọc cứng
     if category:
         cat = db.query(Category).filter(Category.slug == category).first()
         if cat:
@@ -40,7 +40,7 @@ def get_posts(
     if featured is not None:
         query = query.filter(Post.is_featured == featured)
 
-    # Branch cho phần search
+    # Nhánh cho phần tìm kiếm
     if search:
         query = query.filter(
               (Post.title.ilike(f"%{search}%")) |
@@ -55,7 +55,7 @@ def get_posts(
 @router.get("/{post_id}", response_model=PostSchema)
 def get_post(post_id: int, db: Session = Depends(get_db)):
     """
-    Get a specific post by ID
+    Lấy một bài viết cụ thể theo ID
     """
     post = db.query(Post).filter(Post.id == post_id).first()
     if not post or post.status != "published":
@@ -70,7 +70,7 @@ def create_comment(
     db: Session = Depends(get_db)
 ):
     """
-    Add a comment to a post
+    Thêm bình luận vào bài viết
     """
     post = db.query(Post).filter(Post.id == post_id).first()
     if not post:
@@ -86,7 +86,7 @@ def create_comment(
     db.refresh(new_comment)
     return new_comment
 
-# Admin post endpoints
+# Các endpoint bài viết dành cho admin
 @router.get("/admin/all", response_model=List[PostList])
 def get_all_posts(
     skip: int = 0,
@@ -96,7 +96,7 @@ def get_all_posts(
     db: Session = Depends(get_db)
 ):
     """
-    Admin endpoint to get all posts including drafts
+    Endpoint dành cho admin để lấy tất cả bài viết bao gồm cả bản nháp
     """
     query = db.query(Post).order_by(desc(Post.created_at))
     
@@ -113,18 +113,18 @@ def create_post(
     db: Session = Depends(get_db)
 ):
     """
-    Create a new blog post (admin only)
+    Tạo bài viết blog mới (chỉ dành cho admin)
     """
-    # Check if category exists
+    # Kiểm tra xem danh mục có tồn tại không
     category = db.query(Category).filter(Category.id == post.category_id).first()
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     
-    # Calculate read time (simplified version)
+    # Tính thời gian đọc (phiên bản đơn giản)
     words = len(post.content.split())
     read_time = f"{max(1, round(words / 200))} min read"
     
-    # Create excerpt if not provided
+    # Tạo đoạn trích nếu không được cung cấp
     excerpt = post.excerpt
     if not excerpt and len(post.content) > 200:
         excerpt = post.content[:197] + "..."
@@ -155,28 +155,28 @@ def update_post(
     db: Session = Depends(get_db)
 ):
     """
-    Update a blog post (admin only)
+    Cập nhật bài viết blog (chỉ dành cho admin)
     """
     db_post = db.query(Post).filter(Post.id == post_id).first()
     if not db_post:
         raise HTTPException(status_code=404, detail="Post not found")
     
-    # Update the post fields if provided
+    # Cập nhật các trường của bài viết nếu được cung cấp
     update_data = post_update.model_dump(exclude_unset=True)
     
-    # If content is updated, recalculate read time
+    # Nếu nội dung được cập nhật, tính lại thời gian đọc
     if "content" in update_data:
         words = len(update_data["content"].split())
         update_data["read_time"] = f"{max(1, round(words / 200))} min read"
         
-        # Update excerpt if content changed and excerpt not provided
+        # Cập nhật đoạn trích nếu nội dung thay đổi và đoạn trích không được cung cấp
         if "excerpt" not in update_data:
             if len(update_data["content"]) > 200:
                 update_data["excerpt"] = update_data["content"][:197] + "..."
             else:
                 update_data["excerpt"] = update_data["content"]
     
-    # If category_id is provided, check if it exists
+    # Nếu category_id được cung cấp, kiểm tra xem nó có tồn tại không
     if "category_id" in update_data:
         category = db.query(Category).filter(Category.id == update_data["category_id"]).first()
         if not category:
@@ -196,7 +196,7 @@ def delete_post(
     db: Session = Depends(get_db)
 ):
     """
-    Delete a blog post (admin only)
+    Xóa bài viết blog (chỉ dành cho admin)
     """
     db_post = db.query(Post).filter(Post.id == post_id).first()
     if not db_post:

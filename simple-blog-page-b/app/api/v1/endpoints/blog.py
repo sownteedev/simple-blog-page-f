@@ -8,7 +8,6 @@ from passlib.context import CryptContext
 
 router = APIRouter()
 
-# Post endpoints
 @router.post("/posts/", response_model=PostSchema)
 def create_post(post: PostCreate, db: Session = Depends(get_db)):
     author = db.query(User).first()
