@@ -38,7 +38,7 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserSchema)
 def get_current_user_info(current_user: User = Depends(get_current_user)):
     """
-    Get current user info
+    Lấy thông tin người dùng hiện tại
     """
     return current_user
 
@@ -49,9 +49,9 @@ def update_current_user(
     db: Session = Depends(get_db)
 ):
     """
-    Update current user information
+    Cập nhật thông tin người dùng hiện tại
     """
-    # Check if email is changed and if it's already in use
+    # Kiểm tra nếu email được thay đổi và đã được sử dụng
     if user_update.email and user_update.email != current_user.email:
         email_exists = db.query(User).filter(User.email == user_update.email).first()
         if email_exists:
@@ -60,7 +60,7 @@ def update_current_user(
                 detail="Email already registered"
             )
     
-    # Check if username is changed and if it's already in use
+    # Kiểm tra nếu username được thay đổi và đã được sử dụng
     if user_update.username and user_update.username != current_user.username:
         username_exists = db.query(User).filter(User.username == user_update.username).first()
         if username_exists:
@@ -69,15 +69,15 @@ def update_current_user(
                 detail="Username already taken"
             )
     
-    # Update user data
+    # Cập nhật dữ liệu người dùng
     update_data = user_update.model_dump(exclude_unset=True)
     
-    # Hash password if it's being updated
+    # Mã hóa mật khẩu nếu đang được cập nhật
     if "password" in update_data:
         update_data["hashed_password"] = get_password_hash(update_data["password"])
         del update_data["password"]
     
-    # Apply updates
+    # Áp dụng các cập nhật
     for key, value in update_data.items():
         setattr(current_user, key, value)
     
@@ -85,7 +85,7 @@ def update_current_user(
     db.refresh(current_user)
     return current_user
 
-# Admin routes
+# Các route dành cho admin
 @router.get("/", response_model=List[UserSchema])
 def get_users(
     skip: int = 0,
@@ -94,7 +94,7 @@ def get_users(
     db: Session = Depends(get_db)
 ):
     """
-    Get all users (admin only)
+    Lấy tất cả người dùng (chỉ dành cho admin)
     """
     users = db.query(User).offset(skip).limit(limit).all()
     return users
@@ -106,7 +106,7 @@ def get_user(
     db: Session = Depends(get_db)
 ):
     """
-    Get a specific user by ID (admin only)
+    Lấy thông tin người dùng cụ thể theo ID (chỉ dành cho admin)
     """
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -120,7 +120,7 @@ def toggle_admin_status(
     db: Session = Depends(get_db)
 ):
     """
-    Toggle admin status of a user (admin only)
+    Chuyển đổi trạng thái admin của người dùng (chỉ dành cho admin)
     """
     if current_user.id == user_id:
         raise HTTPException(
@@ -148,7 +148,7 @@ def delete_user(
     db: Session = Depends(get_db)
 ):
     """
-    Delete a user (admin only)
+    Xóa người dùng (chỉ dành cho admin)
     """
     if current_user.id == user_id:
         raise HTTPException(
