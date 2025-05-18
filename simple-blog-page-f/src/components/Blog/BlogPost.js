@@ -14,6 +14,13 @@ const BlogPost = () => {
   const [submittingComment, setSubmittingComment] = useState(false);
   const { id } = useParams();
   const { isAuthenticated, user } = useAuth();
+  const [authorId, setAuthorId] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setAuthorId(user.id);
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -60,23 +67,24 @@ const BlogPost = () => {
 
   const handleAddComment = async (e) => {
     e.preventDefault();
-    
     if (!commentText.trim()) {
       setCommentError("Comment cannot be empty");
       return;
     }
-    
     try {
       setSubmittingComment(true);
       setCommentError(null);
-      
-      await postService.addComment(id, commentText);
-      
-      // Refresh post to get updated comments
+
+      // Gửi đúng format: content, post_id, author_id ở cấp cao nhất
+      await postService.addComment(id, {
+        content: commentText,
+        post_id: parseInt(id),
+        author_id: authorId
+      });
+
       const updatedPost = await postService.getPost(id);
       setPost(updatedPost);
-      
-      // Clear comment form
+
       setCommentText('');
       setSubmittingComment(false);
     } catch (err) {
@@ -163,15 +171,17 @@ const BlogPost = () => {
                     />
                     <span className="comment-user-name">{user.username}</span>
                   </div>
-                  <textarea
-                    name="comment"
-                    placeholder="Write your comment..."
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    required
-                    disabled={submittingComment}
-                    className="comment-input"
-                  ></textarea>
+                  <div className="comment-form-fields">
+                    <textarea
+                      name="comment"
+                      placeholder="Write your comment..."
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      required
+                      disabled={submittingComment}
+                      className="comment-input"
+                    ></textarea>
+                  </div>
                   {commentError && <p className="comment-error">{commentError}</p>}
                   <button 
                     type="submit" 

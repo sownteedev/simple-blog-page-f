@@ -63,6 +63,7 @@ class CommentBase(BaseModel):
 
 class CommentCreate(CommentBase):
     post_id: int
+    author_id: Optional[int] = None
 
 class CommentInDB(CommentBase):
     id: int

@@ -391,7 +391,7 @@ require_once ABSPATH . 'wp-settings.php';
         
     vulnerability_names = [
         "XSS", "JWT", "Command Injection",
-        "Authentication"
+        "Authentication", "IDOR"
     ]
 
     for name in vulnerability_names:

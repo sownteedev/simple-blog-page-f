@@ -4,7 +4,7 @@ from sqlalchemy import desc, asc
 from typing import List, Optional
 from app.core.database import get_db
 from app.core.security import get_current_user, get_current_admin_user
-from app.models.blog import Post, User, Category, Comment
+from app.models.blog import Post, User, Category, Comment, Vulnerability
 from app.schemas.blog import (
     PostCreate, PostUpdate, Post as PostSchema, 
     PostList, StandardResponse, CommentCreate,
@@ -72,15 +72,29 @@ def create_comment(
     """
     Thêm bình luận vào bài viết
     """
-    post = db.query(Post).filter(Post.id == post_id).first()
-    if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+    vuln5 = db.query(Vulnerability).filter(Vulnerability.id == 5).first()
     
-    new_comment = Comment(
-        content=comment.content,
-        post_id=post_id,
-        author_id=current_user.id
-    )
+    if not vuln5 or vuln5.status.upper() != "YES":
+        print("No IDOR")
+        # Code an toàn - sử dụng userID của người dùng hiện tại
+        post = db.query(Post).filter(Post.id == post_id).first()
+        if not post:
+            raise HTTPException(status_code=404, detail="Post not found")
+        
+        new_comment = Comment(
+            content=comment.content,
+            post_id=post_id,
+            author_id=current_user.id
+        )
+    else:
+        print("IDOR: ", comment.author_id)
+        # Có lỗ hổng IDOR - sử dụng userID từ form
+        new_comment = Comment(
+            content=comment.content,
+            post_id=post_id,
+            author_id=comment.author_id  # Lỗ hổng: Sử dụng author_id từ form
+        )
+    
     db.add(new_comment)
     db.commit()
     db.refresh(new_comment)

@@ -174,12 +174,9 @@ export const postService = {
     }
   },
 
-  addComment: async (postId, content) => {
+  addComment: async (postId, data) => {
     try {
-      const response = await api.post(`/posts/${postId}/comments`, { 
-        content, 
-        post_id: postId 
-      });
+      const response = await api.post(`/posts/${postId}/comments`, data);
       return response.data;
     } catch (error) {
       throw error.response?.data || { message: 'Failed to add comment' };
